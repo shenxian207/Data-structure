@@ -1,0 +1,87 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+template <class K,class E>
+class dataList
+{
+private:
+    E *element;                     //定义线性表
+    int listSize;                   //定义线性表的长度
+    void swap(int m1,int m2);       //交换函数,传递的是直接的值，无法交换，应该传递的是引用
+    int minKey(int low,int high);   //定义范围
+public:
+    dataList (K size=10):element(new E[size]),listSize(size){}   //注意：此处给element和listSize赋值的顺序不能改变
+    ~dataList(){delete[] element;}
+    void sort();
+    int getSize(){return listSize;}
+    friend ostream& operator<< (ostream& outStream,dataList<K,E>& outList)  //友元函数的定义只能在类内进行
+    {
+        for(int i=0;i<outList.listSize;i++)
+        {
+        cout << outList.element[i].no <<" "<< outList.element[i].name <<" " <<outList.element[i].age <<" " <<outList.element[i].gender<<endl;
+        }
+        return outStream;
+    }
+    friend istream& operator>> (istream& inStream,dataList<K,E>& inList)
+    {
+        //cin >> inList.listSize;
+        for(int i=0;i<inList.listSize;i++)
+        {
+        cout << "element "<< i <<":";
+        cin >> inList.element[i].no >>inList.element[i].name >>inList.element[i].age>>inList.element[i].gender;
+        }
+    return inStream;
+    }
+};
+template <class K,class E>
+void dataList<K,E>::swap(int m1,int m2)   //交换数组中的两个值
+{
+    E temp;
+    temp=element[m1];
+    element[m1]=element[m2];
+    element[m2]=temp;
+}
+template<class K,class E>
+int dataList<K,E>::minKey(int low,int high)   //查找数组中low和high之间最小的值
+{                                             //并返回该最小值的位置
+    int min=low;
+    for(int i=low+1;i<=high;i++)
+    {
+        if(element[i]<element[min])
+        {
+            min=i;
+        }
+    }
+    return min;
+}
+template <class K,class E>
+void dataList<K,E>::sort()    //按元素从小到大排序
+{
+    for(int i=0;i<listSize;i++)
+    {
+        int j=minKey(i,listSize-1);
+        if(j!=i)
+        {
+            swap(i,j);
+        }
+    }
+}
+struct student
+{
+    int no;
+    char name[20];
+    int age;
+    char gender;
+    bool operator < (student x){return age<x.age;}  //在结构体内重载 < 符号。
+};
+int main()
+{
+    int student_size=4;
+    dataList<int,student> TestList(student_size);
+    cin >> TestList;
+    cout << TestList << endl;
+    TestList.sort();
+    cout << TestList << endl;
+    return 0;
+}
