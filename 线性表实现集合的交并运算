@@ -1,0 +1,170 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+//顺序表
+
+template <class T,class E>
+class SeqList
+{
+//protected:
+public:
+    E *data;                     //定义指针存放数组
+    int maxSize;                 //最大可容纳的项数
+    int n;                       //当前已存表项数
+    //void reSize(int newSize);    //该表数组空间的大小
+//public:
+    SeqList(int my_size=4);       //构造函数
+    SeqList(SeqList<T,E>&L);          //复制构造函数
+    ~SeqList(){delete[] data;}         //析构函数
+    int Size() const{return maxSize;}  //返回表的最大容量
+    int Length() const{return n;}      //返回此时表的长度
+    int Search(E& x) const;             //搜索在表中的位置，返回位置序号
+    int Locate(int i) const{return i-1;};           //返回第i项的序号
+    bool Insert(int i,E x);            //插入数据
+    bool Remove(int i,E& x);           //删除数据
+    void getData(int i,E& x);          //找到序号为i的数
+};
+template<class T,class E>
+SeqList<T,E>::SeqList(int my_size)       //构造函数
+{
+    if(my_size>0)
+    {
+        maxSize=my_size;
+        n=0;
+        data=new E[maxSize];              //初始化指针数组
+        if(data==NULL)                    //判断内存是否分配成功
+        {
+            cout << "存储分配错误！"<< endl;
+            exit(1);
+        }
+    }
+}
+template<class T,class E>
+SeqList<T,E>::SeqList(SeqList<T,E>& L)    //复制构造函数
+{
+    maxSize=L.Size();
+    n= L.Length();
+    data=new E[maxSize];
+    E record;
+    if(data==NULL)
+    {
+        cout << "存储分配错误！" <<endl;
+        exit(1);
+    }
+    for(int i=1;i<=n;i++)                 //复制各个表数据
+    {
+        L.getData(i,record);
+        data[i-1]=record;
+    }
+}
+template <class T,class E>
+int SeqList<T,E>::Search(E &x) const           //返回对应数据项的序号
+{
+    for(int i=0;i<n;i++)
+    {
+        if(data[i]==x)
+        {
+            return i+1;
+        }
+    }
+    return 0;
+}
+template<class T,class E>
+bool SeqList<T,E>::Insert(int i,E x)          //插入
+{
+    if(n==maxSize||i<1||i>n+1)               //判断插入位置是否合理
+    {
+        return false;
+    }
+    for (int j=n;j>=i;j--)                   //将插入位置后面的元素向后移一位
+    {
+        data[j]=data[j-1];
+    }
+    data[i-1]=x;                            //插入数据
+    n++;
+    return true;
+}
+template<class T,class E>
+bool SeqList<T,E>::Remove(int i,E& x)            //删除
+{
+    if(n==0||i<1||i>n)               //判断删除位置是否合理
+    {
+        return false;
+    }
+    x=data[i-1];
+    for(int j=i;j<n;j++)                 //将删除位置之后的所有元素向前移动一位
+    {
+        data[j-1]=data[j];
+    }
+    n--;
+    return true;
+}
+/*struct student
+{
+    int no;
+    char name[20];
+    int age;
+    char gender;
+};*/
+template<class T,class E>
+void SeqList<T,E>::getData(int i,E& x)
+{
+    x=this->data[i];
+}
+void Union(SeqList<int,int>&LA,SeqList<int,int>&LB)  //集合并运算
+{
+    int n1=LA.Length(),n2=LB.Length();
+    int i,k,x;
+    for(i=0;i<n2;i++)                 //查找B中是否有A中的元素
+    {
+        LB.getData(i,x);
+        k=LA.Search(x);
+        if(k==0)
+        {
+            LA.Insert(n1,x);           //将相同元素插入到A集合中
+            n1++;
+        }
+    }
+}
+void Intersection(SeqList<int,int>&LA,SeqList<int,int>&LB)
+{
+    int n2=LB.Length();
+    int x,k;
+    for(int i=0;i<n2;i++)
+    {
+        LB.getData(i,x);
+        k=LA.Search(x);
+        if(k==0)
+        {
+            LB.Remove(i+1,x);
+            n2--;
+        }
+    }
+}
+int main()
+{
+    int my_size=10;
+    SeqList<int,int> my_List1(my_size);
+    SeqList<int,int> my_List2(my_size);
+    int num1[4]={2,3,1,4};
+    int num2[4]={3,4,2,5};
+    my_List1.n=4;
+    my_List2.n=4;
+    my_List1.data=num1;
+    my_List2.data=num2;
+    
+    /*Union(my_List1,my_List2);       //并运算
+    for(int i=0;i<my_List1.n;i++)
+    {
+        cout << my_List1.data[i] <<" ";
+    }*/
+    
+    Intersection(my_List1,my_List2);   //交运算
+    for(int i=0;i<my_List2.n;i++)
+    {
+        cout << my_List2.data[i] <<" ";
+    }
+    
+    return 0;
+}
