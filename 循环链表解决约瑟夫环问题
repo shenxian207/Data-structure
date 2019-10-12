@@ -1,0 +1,134 @@
+#include <iostream>
+using namespace std;
+
+struct LinkNode
+{
+    int data;
+    LinkNode *link;
+    LinkNode(){link=NULL;}
+    LinkNode(int i,LinkNode *ptr=NULL){data=i;link=ptr;}
+};
+class CircList
+{
+public:
+    LinkNode *first,*last;
+    CircList(){first=new LinkNode;};
+    ~CircList(){};
+    int Length();
+    bool Search(int d);
+    LinkNode* Locate(int i);
+    void Remove(int i);
+    void Print();
+};
+int CircList::Length()
+{
+    int n=0;
+    LinkNode *current;
+    current=this->first->link;
+    while(current!=first)
+    {
+        current=current->link;
+        n++;
+    }
+    return n;
+}
+bool CircList::Search(int d)
+{
+    LinkNode *current;
+    current=this->first->link;
+    while(current!=first)
+    {
+        if(current->data==d)
+        {
+            return true;
+        }
+        current=current->link;
+    }
+    return false;
+}
+LinkNode* CircList::Locate(int i)
+{
+    int n=1;
+    LinkNode *current;
+    current=this->first->link;
+    while(current!=first&&n<i)
+    {
+        current=current->link;
+        n++;
+    }
+    return current;
+}
+void CircList::Remove(int i)
+{
+    LinkNode *current;
+    current=this->Locate(i-1);
+    current->link=Locate(i)->link;
+    delete current;
+}
+void CircList::Print()
+{
+    LinkNode *current;
+    current=this->first->link;
+    while(current!=first)
+    {
+        cout << current->data;
+        if(current->link!=first)
+        {
+            cout << " ";
+        }
+        current=current->link;
+    }
+}
+void CreatCirclist(CircList &mlist,int n)
+{
+    LinkNode *newNode,*last;
+    last=mlist.first;
+    int i=1;
+    while(i<=n)
+    {
+        newNode=new LinkNode(i);
+        last->link=newNode;
+        last=newNode;
+        i++;
+    }
+    last->link=mlist.first->link;  //last->link=mlist.first->link;
+}
+void Josephus(CircList &mlist,int n,int m)
+{
+    LinkNode *current,*pre;
+    pre=new LinkNode;
+    current=mlist.first->link;
+    int i,j;
+    for(i=0;i<n;i++)
+    {
+        for(j=1;j<m;j++)
+        {
+            pre=current;
+            current=current->link;
+        }
+        cout << current->data;
+        if(i!=n-1)
+        {
+            cout << " ";
+        }
+        pre->link=current->link;
+        current=pre->link;
+    }
+}
+int main()
+{
+    CircList my_list;
+    int m,n;
+    cin >> n >> m;   //输入游戏人数和报数间隔
+    CreatCirclist(my_list,n);
+    Josephus(my_list,n,m);
+    /*if(my_list.Search(3))
+    {
+        cout << "safadfs";
+    }*/
+    //my_list.Remove(3);      //正确
+    //cout << my_list.Locate(5)->data;  //没算first指针
+    //cout << my_list.Length();  //不算-1
+    //my_list.Print();     //没显示-1
+    return 0;
+}
