@@ -1,0 +1,111 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct LinkNode
+{
+    string ad;
+    string da;
+    string ne;
+};
+void Insert(int n,LinkNode *Node)
+{
+    int i=0;
+    cin >> Node[i].ad >> Node[i].da >> Node[i].ne;
+    while(i<(n-1))
+    {
+        i++;
+        cin >> Node[i].ad >> Node[i].da;
+        cin >> Node[i].ne;
+    }
+}
+void Move(int n,string first_ad,LinkNode *Node,string *address,string *data,string *next)
+{
+    int m=0,i;
+    string link;
+    for(i=0;i<n;i++)
+    {
+        if(Node[i].ad==first_ad)
+        {
+            address[m]=Node[i].ad;
+            data[m]=Node[i].da;
+            next[m]=Node[i].ne;
+            m=i;
+            break;
+        }
+    }
+    link=Node[m].ne;
+    m=1;
+    while(m<n)
+    {
+        for(int k=0;k<n;k++)
+        {
+            if(Node[k].ad==link)
+            {
+                address[m]=Node[k].ad;
+                data[m]=Node[k].da;
+                next[m]=Node[k].ne;
+                link=Node[k].ne;
+                break;
+            }
+        }
+        m++;
+    }
+
+}
+void Print(int n,int *address,int *data,int *next)
+{
+    for(int i=0;i<n;i++)
+    {
+        cout << address[i] << " " << data[i] <<" " << next[i] << endl;
+    }
+}
+void outPrint(int n,string *address,string *data,string *next)
+{
+    int i=n-1,j=0;
+    int k=0;
+    while(k<n)
+    {
+        if(k<n&&k%2==0)
+      {
+        if(k!=n-1)
+        {
+            cout << address[i] << " " << data[i] << " " << address[j] << endl;
+            i-=1;
+            k++;
+        }
+        else if(k==(n-1))
+        {
+            cout << address[i] << " " << data[i] << " " << "-1" << endl;
+            k++;
+        }
+      }
+        if(k<n&&k%2!=0)
+      {
+        if(k!=(n-1))
+        {
+            cout << address[j] << " " << data[j] << " " << address[i] << endl;
+            j+=1;
+            k++;
+        }
+        else if(k==(n-1))
+        {
+            cout << address[j] << " " << data[j] << " " << "-1" << endl;
+            k++;
+        }
+      }
+    }
+
+}
+int main()
+{
+    int n;
+    string first_address;
+    cin >> first_address >> n;
+    LinkNode Node[n];
+    string address[n],data[n],next[n];
+    Insert(n,Node);
+    Move(n,first_address,Node,address,data,next);
+    outPrint(n,address,data,next);
+    return 0;
+}
