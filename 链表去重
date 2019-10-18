@@ -1,0 +1,117 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct LinkNode
+{
+    string ad;
+    int da;
+    string ne;
+};
+void Insert(int n,string *address,int *data,string *next)
+{
+    for(int i=0;i<n;i++)
+    {
+        cin >> address[i] >> data[i] >> next[i];
+    }
+}
+void Move(int n,string first_ad,LinkNode *Node,string *address,int *data,string *next)
+{
+    int i,j;
+    string link;
+    for(i=0;i<n;i++)
+    {
+        if(address[i]==first_ad)
+        {
+            Node[0].ad=address[i];
+            Node[0].da=data[i];
+            Node[0].ne=next[i];
+            break;
+        }
+    }
+    i=1;
+    link=Node[0].ne;
+    while(i<n)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(address[j]==link)
+            {
+                Node[i].ad=address[j];
+                Node[i].da=data[j];
+                Node[i].ne=next[j];
+                link=Node[i].ne;
+                break;
+            }
+        }
+        i++;
+    }
+}
+//void Print(int n,string *address,string *data,string *next)
+void Print(int n,LinkNode *Node)
+{
+    /*for(int i=0;i<n;i++)
+    {
+        cout << address[i] << " " << data[i] <<" " << next[i] << endl;
+    }*/
+    for(int i=0;i<n;i++)
+    {
+        cout << Node[i].ad << " " << Node[i].da <<" " << Node[i].ne << endl;
+    }
+}
+void outPrint2(int n,LinkNode *Node)
+{
+    int i,j,k=0;
+    string link;
+    LinkNode Node_temp[n-1];
+    cout << Node[0].ad << " " << Node[0].da <<" " << Node[0].ne << endl;
+    for(i=1;i<n;i++)
+    {
+        for(j=i-1;j>=0;j--)
+        {
+            if((Node[i].da)*(Node[i].da)==(Node[j].da)*(Node[j].da))
+            {
+                Node[i-1].ne=Node[i].ne;
+                Node_temp[k].ad=Node[i].ad;
+                Node_temp[k].da=Node[i].da;
+                Node_temp[k].ne=Node[i].ne;
+                k++;
+                break;
+            }
+        }
+    }
+    link=Node[0].ne;
+    while(link!="-1")
+    {
+        for(j=1;j<n;j++)
+        {
+            if(Node[j].ad==link)
+            {
+                cout << Node[j].ad << " " << Node[j].da <<" " << Node[j].ne << endl;
+                link=Node[j].ne;
+                break;
+            }
+        }
+    }
+    for(int j=0;j<k-1;j++)
+    {
+        Node_temp[j].ne=Node_temp[j+1].ad;
+    }
+    for(int i=0;i<k;i++)
+    {
+        cout << Node_temp[i].ad << " " << Node_temp[i].da <<" " << Node_temp[i].ne << endl;
+    }
+}
+int main()
+{
+    int n;
+    string first_address;
+    cin >> first_address >> n;
+    LinkNode Node[n];
+    string address[n],next[n];
+    int data[n];
+    Insert(n,address,data,next);
+    Move(n,first_address,Node,address,data,next);
+    outPrint2(n,Node);
+    return 0;
+}
