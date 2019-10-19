@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+//反向链接链表
+struct LinkNode
+{
+    string ad;
+    int da;
+    string ne;
+};
+void Insert(int n,string *address,int *data,string *next)
+{
+    for(int i=0;i<n;i++)
+    {
+        cin >> address[i] >> data[i] >> next[i];
+    }
+}
+void Move(int n,string first_ad,LinkNode *Node,string *address,int *data,string *next)
+{
+    int i,j;
+    string link;
+    for(i=0;i<n;i++)
+    {
+        if(address[i]==first_ad)
+        {
+            Node[0].ad=address[i];
+            Node[0].da=data[i];
+            Node[0].ne=next[i];
+            break;
+        }
+    }
+    i=1;
+    link=Node[0].ne;
+    while(i<n)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(address[j]==link)
+            {
+                Node[i].ad=address[j];
+                Node[i].da=data[j];
+                Node[i].ne=next[j];
+                link=Node[i].ne;
+                break;
+            }
+        }
+        i++;
+    }
+}
+//void Print(int n,string *address,string *data,string *next)
+void Print(int n,LinkNode *Node)
+{
+    /*for(int i=0;i<n;i++)
+    {
+        cout << address[i] << " " << data[i] <<" " << next[i] << endl;
+    }*/
+    for(int i=0;i<n;i++)
+    {
+        cout << Node[i].ad << " " << Node[i].da <<" " << Node[i].ne << endl;
+    }
+}
+void outPrint3(int n,int m,LinkNode *Node)
+{
+    int i;
+    for(i=m;i>0;i--)
+    {
+        Node[i].ne=Node[i-1].ad;
+    }
+    Node[0].ne=Node[m+1].ad;
+    for(i=m;i>=0;i--)
+    {
+        cout << Node[i].ad << " " << Node[i].da << " " << Node[i].ne << endl;
+    }
+    for(i=m+1;i<n;i++)
+    {
+        cout << Node[i].ad << " " << Node[i].da << " " << Node[i].ne << endl;
+    }
+}
+int main()
+{
+    int n,m;
+    string first_address;
+    cin >> first_address >> n >> m;
+    LinkNode Node[n];
+    string address[n],next[n];
+    int data[n];
+    Insert(n,address,data,next);
+    Move(n,first_address,Node,address,data,next);
+    outPrint3(n,m-1,Node);
+    //Print(n,Node);
+    return 0;
+}
