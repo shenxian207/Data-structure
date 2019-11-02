@@ -1,0 +1,101 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class my_Stack {
+public:
+    int top;
+    int stack_size;
+    int *my_buffer;
+public:
+    my_Stack(int size_){stack_size=size_;}
+    ~my_Stack(){delete []my_buffer;}
+    int length(){return top;}
+    bool IsEmpty();
+    bool IsFull();
+    void push(int da);
+    void pop();
+};
+bool my_Stack::IsEmpty()
+{
+    if(top==0)
+    {
+        return true;
+    }
+    return false;
+}
+bool my_Stack::IsFull()
+{
+    if(top==stack_size)
+    {
+        return true;
+    }
+    return false;
+}
+void my_Stack::push(int da)
+{
+    if(!IsFull())
+    {
+        top++;
+        my_buffer[top]=da;
+    }
+}
+void my_Stack::pop()
+{
+    if(!IsEmpty())
+    {
+        top--;
+        cout << my_buffer[top+1] << endl;
+    }
+    else
+    {
+        cout << "Invalid" << endl;
+    }
+}
+void Median(my_Stack *mstack,int n)
+{
+    if(!mstack->IsEmpty())
+    {
+        cout << mstack->my_buffer[n] << endl;
+    }
+    else
+    {
+        cout << "Invalid" <<endl;
+    }
+}
+int main()
+{
+    int n,j=0;
+    cin >> n;
+    string order[n];
+    int data[n];
+    for(int i=0;i<n;i++)
+    {
+        cin >> order[i];
+        if(order[i]=="Push")
+        {
+            cin >> data[j];
+            j++;
+        }
+    }
+    int k=0;
+    my_Stack *my_stack=new my_Stack(n);
+    for(int i=0;i<n;i++)
+    {
+        cin >> order[i];
+        if(order[i]=="push")
+        {
+            my_stack->push(data[k]);
+            k++;
+        }
+        else if(order[i]=="pop")
+        {
+            my_stack->pop();
+        }
+        else
+        {
+            Median(my_stack,my_stack->top%2?my_stack->top/2:(my_stack->top+1)/2);
+        }
+    }
+    return 0;
+}
