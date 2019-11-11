@@ -1,0 +1,124 @@
+#include <iostream>
+
+using namespace std;
+class SeqQueue{
+public:
+    int rear,front;
+    int *elements;
+    int maxSize;
+public:
+    SeqQueue(int sz=10){front=rear=0;maxSize=sz;elements=new int(sz);}
+    ~SeqQueue(){delete[] elements;}
+    bool EnQueue(int &x);
+    bool DeQueue(int &x);
+    bool getFront(int &x);
+    void makeEmpty(){front=rear=0;}
+    bool IsEmpty() const{return front==rear;}
+    bool IsFull()const {return ((rear)%maxSize==front);}
+    int getSize() const {return (rear-front+maxSize)%maxSize;}
+    void print();
+    void show()
+    {
+        for(int i=0;i<getSize();i++)
+        {
+            cout<<elements[i]<<" ";
+        }
+        cout<<endl;
+    }
+};
+bool SeqQueue::EnQueue(int &x)   //入队
+{
+    if(!IsFull())
+    {
+        elements[rear]=x;
+        rear++;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+bool SeqQueue::DeQueue(int &x)   //出队
+{
+    if(!IsEmpty())
+    {
+        x=elements[front];
+        front++;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+bool SeqQueue::getFront(int &x)    //取队头元素
+{
+    if(!IsEmpty())
+    {
+        x=elements[front];
+        return true;
+    }
+    else
+    {
+        return false ;
+    }
+}
+void SeqQueue::print()
+{
+    while(!this->IsEmpty())
+    {
+        int x;
+        if(this->DeQueue(x)){cout << x << " ";}
+    }
+}
+int main()
+{
+    SeqQueue *seq_A=new SeqQueue(10);
+    SeqQueue *seq_B=new SeqQueue(10);
+    int n,x;
+    cin >> n;
+    int i=0;
+    while(i<n)
+    {
+        cin >> x;
+        if(x%2==0)
+        {
+            seq_B->EnQueue(x);
+        }
+        else
+        {
+            seq_A->EnQueue(x);
+        }
+        i++;
+    }
+    seq_B->show();
+    if(seq_B->DeQueue(x)){cout << x << " ";}
+    if(seq_B->DeQueue(x)){cout << x << " ";}
+    if(seq_B->DeQueue(x)){cout << x << " ";}
+    //i=0;
+    //seq_A->print();
+    //seq_B->print();
+    /*while(!seq_A->IsEmpty()||!seq_B->IsEmpty())
+    {
+        if(seq_A->DeQueue(x)){cout << x;}
+        if(seq_A->DeQueue(x)){cout << x;}
+        if(seq_B->DeQueue(x)){cout << x;}
+    }*/
+    /*if(my_seq->IsEmpty())
+    {
+        cout << "Empty";
+    }
+    int x=0;
+    if(my_seq->EnQueue(x)){cout << "yes";}
+    if(my_seq->EnQueue(x)){cout << "yes";}
+    if(my_seq->EnQueue(x)){cout << "yes";}
+    if(my_seq->EnQueue(x)){cout << "yes";}
+    if(my_seq->EnQueue(x)){cout << "yes";}
+    if(my_seq->DeQueue(x)){cout << x;}
+    if(my_seq->IsFull())
+    {
+        cout << "full";
+    }*/
+    return 0;
+}
