@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+bool compare(int m,int a[],int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        if(m<a[i])
+        {
+            return true;
+        }
+    }
+    return false;
+}
+int MIN(int a[],int n,int p)
+{
+    int k=0;
+    int i=0;
+    int m=100;
+    while(i<n)
+    {
+        if(a[i]>p)
+        {
+            if(a[i]<m)
+            {
+                m=a[i];
+                k=i;
+            }
+        }
+        i++;
+    }
+    return k;
+}
+int main()
+{
+    int n;
+    cin >> n;
+    int num[n];
+    for(int i=0;i<n;i++)
+    {
+        cin >> num[i];
+    }
+    int number=1;
+    int m;
+    int Min[n];
+    Min[number-1]=num[0];
+    for(int i=1;i<n;i++)
+    {
+       if(compare(num[i],Min,number))
+       {
+           m=MIN(Min,number,num[i]);
+           Min[m]=num[i];
+       }
+       else
+       {
+           Min[number]=num[i];
+           number++;
+       }
+    }
+    cout << number ;
+    return 0;
+}
+
