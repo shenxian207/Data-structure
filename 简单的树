@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+struct BinTreeNode{
+    int data;
+    BinTreeNode *leftChild,*rightChild;
+    BinTreeNode(){leftChild=NULL;rightChild=NULL;}
+    BinTreeNode(int x,BinTreeNode *l=NULL,BinTreeNode *r=NULL){data=x;leftChild=l;rightChild=r;}
+};
+
+class BinaryTree{
+public:
+    BinaryTree():root(NULL){}
+    BinaryTree(int value):RefValue(value),root(NULL){}  //构造函数
+    BinaryTree(BinaryTree &s);
+    //~BinaryTree(){destroy(root);}          //析构函数
+    bool IsEmpty(){return root==NULL;}     //判空
+    //int Hight(){return Hight(root);}       //求树的高度
+    //int Size(){return Size(root);}         //求节点数
+    BinTreeNode *Parent(BinTreeNode *t){return (root==NULL||root==t)?NULL:Parent(root,t);}   //返回双亲节点
+    BinTreeNode *LeftChild(BinTreeNode *t){return (t!=NULL)?t->leftChild:NULL;}              //返回左节点
+    BinTreeNode *RightChild(BinTreeNode *t){return (t!=NULL)?t->rightChild:NULL;}            //返回右节点
+    BinTreeNode *getRoot()const{return root;}     //返回根节点
+
+    //void preOrder(void(*visit)(BinTreeNode *t)){preOrder(root,visit);}         //前序遍历
+    //void inOrder(void (*visit)(BinTreeNode *t)){inOrder(root,visit);}          //中序遍历
+    //void postOrder(void (*visit)(BinTreeNode *t));                             //后序遍历
+    int Insert(const int item);              //插入节点
+    BinTreeNode *Find(int item)const;        //搜索节点
+
+protected:
+    BinTreeNode *root;
+    int RefValue;
+    void CreatBinTree(BinTreeNode &subTree);         //创造二叉树
+    bool Insert(BinTreeNode* &subTree,int &x);                    //插入算法
+    void destory(BinTreeNode* subTree);                          //删除算法
+    bool Find(BinTreeNode *subTree,int &x);                       //搜索算法
+    //BinTreeNode *Copy(BinTreeNode *r);
+    int Height(BinTreeNode *subTree);                             //求树的高度
+    int Size(BinTreeNode *subTree);                               //楸树的节点数
+    BinTreeNode *Parent(BinTreeNode *subTree,BinTreeNode *t);     //求节点的双亲节点
+    BinTreeNode *Find(BinTreeNode *subTree,BinTreeNode *t);       //搜索算法
+};
+BinTreeNode *BinaryTree::Parent(BinTreeNode *subTree,BinTreeNode *t)  //搜索给定节点的双亲节点
+{
+    if(subTree==NULL){return NULL;}
+    if(subTree->leftChild==t||subTree->rightChild==t){return subTree;}
+    BinTreeNode *p;
+    if((p=Parent(subTree->leftChild,t))!=NULL){return p;}  //递归搜索左子树
+    else {return Parent(subTree->rightChild,t);}           //递归搜索右子树
+}
+void BinaryTree::destory(BinTreeNode *subTree)      //删除给定根的子树
+{
+    if(subTree!=NULL)
+    {
+        destory(subTree->leftChild);     //删除左子树
+        destory(subTree->rightChild);    //删除右子树
+        delete subTree;                  //删除根节点
+    }
+}
+void BinaryTree::CreatBinTree(BinTreeNode &subTree)
+{
+    int data;
+    cin >> data;
+    if(subTree!=NULL&&data!=0)
+    {
+        subTree->data=data;
+        CreatBinTree(subTree->leftChild);
+        CreatBinTree(subTRee->rightChild);
+    }
+}
+int main()
+{
+    BinaryTree *tree=new BinaryTree();
+    BinTreeNode *root=new BinTreeNode(1);
+    tree->CreatBinTree(root);
+    return 0;
+}
