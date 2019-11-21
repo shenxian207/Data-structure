@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
+struct BinNode{
+    int data;
+    BinNode *leftNode;
+    BinNode *rightNode;
+    BinNode(int data_){data=data_;leftNode=rightNode=NULL;}   //初始化节点
+};
+class BinTree
+{
+protected:
+    BinNode *root;
+    BinNode* rfindX(int x,BinNode *r)    //返回父节点，递归
+    {
+        if(!r){return NULL;}
+        if(r->data==x){return r;}
+        BinNode *found;
+        found=rfindX(x,r->leftNode);
+        return found?found:rfindX(x,r->rightNode);
+    }
+
+    int SumofLeave(BinNode *r)      //求叶子结点值的和
+    {
+        int sum=0;
+        if(!r){return 0;}
+        else{
+            if(!r->leftNode&&!r->rightNode)    //判断是否为叶子节点
+            {
+                sum+=r->data;
+                sum+=SumofLeave(r->leftNode);    //递归得到叶子结点
+                sum+=SumofLeave(r->rightNode);
+            }
+        }
+        return sum;
+    }
+
+public:
+    BinTree(){root=NULL;}
+    BinTree(int r){root=new BinNode(r);}
+    ~BinTree(){}
+    BinNode* findX(int x){return rfindX(x,root);}   //返回父节点
+    bool Insert(int p,int LorR,int x)     //中序创建二叉树
+    {
+        BinNode *found;
+        found=findX(p);
+        if(!found){return false;}
+        if(LorR==0)
+        {
+            if(found->leftNode){return false;}
+            found->leftNode=new BinNode(x);
+        }
+        else
+        {
+            if(found->rightNode){return false;}
+            found->rightNode=new BinNode(x);
+        }
+        return true;
+    }
+    int getSumofleave(){return SumofLeave(root);}    //返回叶子结点的和
+};
+
+int main()
+{
+    int n;
+    cin >> n;
+    int r,LorR,data;
+    cin >> r;
+    BinTree bt(r);
+    for(int i=1;i<n;i++)
+    {
+        cin >> r >> LorR >> data;
+        bt.Insert(r,LorR,data);
+    }
+    cout << bt.getSumofleave();
+    return 0;
+}
